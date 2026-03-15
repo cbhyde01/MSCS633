@@ -23,7 +23,9 @@ Usage:
 """
 
 import os
+import re
 import sys
+from urllib.parse import urlparse
 
 import qrcode
 from qrcode.constants import ERROR_CORRECT_H
@@ -61,6 +63,28 @@ def get_url_from_user() -> str:
         sys.exit(1)
 
     return url
+
+
+def build_output_filename(url: str) -> str:
+    """
+    Build a safe output image filename from the entered URL/domain.
+
+    Examples:
+        https://www.google.com   -> google.com.png
+        bioxsystems.com          -> bioxsystems.com.png
+    """
+    parsed = urlparse(url if "://" in url else f"https://{url}")
+    host_or_path = (parsed.netloc or parsed.path or "qr_code").split("/")[0]
+
+    # Remove a leading "www." for cleaner names
+    cleaned = host_or_path.lower().removeprefix("www.")
+
+    # Keep only filename-safe characters
+    safe_name = re.sub(r"[^a-zA-Z0-9._-]+", "_", cleaned).strip("._-")
+    if not safe_name:
+        safe_name = "qr_code"
+
+    return f"{safe_name}.png"
 
 
 def generate_qr_code(url: str, output_file: str = DEFAULT_OUTPUT_FILE) -> qrcode.image.base.BaseImage:
@@ -116,7 +140,8 @@ def display_summary(url: str, output_file: str) -> None:
     print("        Biox Systems — QR Code Generator")
     print("=" * 55)
     print(f"  URL Encoded : {url}")
-    print(f"  Output File : {abs_path}")
+    print(f"  Output File : {os.path.basename(output_file)}")
+    print(f"  Saved To    : {abs_path}")
     print(f"  File Size   : {file_size_kb:.2f} KB")
     print("=" * 55)
     print("  QR code successfully generated!")
@@ -141,17 +166,11 @@ def main() -> None:
     # Step 1: Get the URL from the user
     url = get_url_from_user()
 
-    # Step 2: Optionally allow a custom output filename
-    custom_file = input(
-        f"Enter output filename (press Enter to use '{DEFAULT_OUTPUT_FILE}'): "
-    ).strip()
-    output_file = custom_file if custom_file else DEFAULT_OUTPUT_FILE
-
-    # Ensure the filename ends with a recognised image extension
-    if not output_file.lower().endswith((".png", ".jpg", ".jpeg")):
-        output_file += ".png"
+    # Step 2: Auto-generate output filename from the entered URL/domain
+    output_file = build_output_filename(url)
 
     print(f"\nGenerating QR code for: {url}")
+    print(f"Output filename: {output_file}")
 
     # Step 3: Generate and save the QR code
     generate_qr_code(url, output_file)
