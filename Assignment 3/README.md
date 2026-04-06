@@ -47,8 +47,3 @@ bot: I am doing very well, thank you for asking.
 user: You're welcome.
 bot: Do you like hats?
 ```
-
-## Notes
-
-- The chatbot is trained on first run and then reuses local trained data.
-- Use this terminal output to capture the screenshot required by the assignment.
