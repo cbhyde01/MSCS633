@@ -1,12 +1,13 @@
-# Python
+# Python virtual environment
+.venv/
+venv/
+
+# Python cache and build artifacts
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
 *.egg-info/
-
-# Virtual environment
-.venv/
 
 # Local databases and trained bot artifacts
 db.sqlite3
@@ -17,3 +18,7 @@ data/
 
 # Office temporary files
 ~$*
+
+# Generated output (optional)
+# Uncomment if you do not want to version generated QR images
+# qr_code.png

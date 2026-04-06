@@ -1,0 +1,8 @@
+# requirements.txt
+# -----------------
+# Manifest / Dependency file for the Biox Systems QR Code Generator
+# Install all dependencies with:
+#   pip install -r requirements.txt
+
+qrcode[pil]==8.0          # QR code generation library (includes Pillow image support)
+Pillow==11.1.0             # Python Imaging Library — required by qrcode to save PNG/JPG files
