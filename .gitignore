@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+
+# Virtual environment
+.venv/
+
+# Local databases and trained bot artifacts
+db.sqlite3
+data/
+
+# macOS
+.DS_Store
+
+# Office temporary files
+~$*
